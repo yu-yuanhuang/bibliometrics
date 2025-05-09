@@ -1,6 +1,13 @@
 # RIS-WoS Format Converter
 
-Solve the need to convert EndNote documents to WoS.
+*Yu-Yuan Huang*
+@[ResearchGate](https://www.researchgate.net/profile/Yu-Yuan-Huang-4?ev=hdr_xprf)
+
+> When conducting bibliometric analysis, we often encounter citation data conversion problems when processing Chinese literature database data. This document is suitable for Taiwanese researchers who use the Airiti and NDLTD databases and need to import data into CiteSpace analysis software.
+>
+> The processed dataset can be imported and analyzed in CiteSpace like the original WoS dataset.
+
+## Solve the need to convert EndNote documents to WoS.
 
 - Select RIS format for export.
 - Open the code in Colab and upload the exported RIS file
