@@ -1,44 +1,37 @@
 # RIS-WoS Format Converter
 
-解決EndNote文獻資料轉換至WoS使用需求
+Solve the need to convert EndNote documents to WoS.
 
-- 匯出選擇RIS格式
-- 在Colab開啟程式碼，上傳匯出之RIS檔
-- 完成轉換時自動下載文件
+- Select RIS format for export.
+- Open the code in Colab and upload the exported RIS file
+- Automatically download files when the conversion is complete
 
-輸出：符合 Web of Science（WoS）格式的 .txt 純文字檔 修正項目： 多筆文獻逐筆處理 摘要（AB）多行合併 作者單位（C1/AD）整合 期刊名稱自動補齊（JO/T2/JF/PB） DOI 檢查與補值 中文與英文關鍵字區分為DE/ID
+Output: .txt plain text file in the Web of Science (WoS) format Modifications: Process multiple documents one by one Abstract (AB) multi-line merge Author affiliation (C1/AD) integration Journal name auto-completion (JO/T2/JF/PB) DOI check and fill Chinese and English keywords are distinguished as DE/ID
 
 > [!NOTE]
 >
-> 上傳 .ris 檔案
->
-> 讀取內容
->
-> 基礎欄位處理函數
->
-> 單筆 RIS → WoS 格式函數（每筆加 FN, VR）
->
-> 處理所有記錄
->
-> 組合輸出
->
-> 輸出為檔案並下載
->
-> 程序可在colab運行
+> - Upload .ris file
+> - Read content
+> - Basic field processing function
+> - Single RIS → WoS format function (add FN, VR to each transaction)
+> - Process all records
+> - Combined Output
+> - Export to file and download
+> - The program can be run in colab
 
 ```
 import re
 from google.colab import files
 
-# === 上傳 .ris 檔案 ===
+# === Upload .ris file ===
 uploaded = files.upload()
 filename = list(uploaded.keys())[0]
 
-# === 讀取內容 ===
+# === Read content ===
 with open(filename, 'r', encoding='utf-8') as f:
     ris_text = f.read()
 
-# === 基礎欄位處理函數 ===
+# === Basic field processing function ===
 def extract_ris_value(tag, content):
     pattern = rf'^{tag}  - (.*)$'
     return re.findall(pattern, content, re.MULTILINE)
@@ -57,7 +50,7 @@ def extract_multiline(tag, text):
             break
     return [" ".join(content)] if content else []
 
-# === 單筆 RIS → WoS 格式函數（每筆加 FN, VR）===
+# === Single RIS → WoS format function ===
 def ris_to_wos(record):
     au_list = extract_ris_value("AU", record)
     ti_list = extract_ris_value("TI", record) or extract_ris_value("T1", record)
@@ -109,14 +102,14 @@ def ris_to_wos(record):
     wos_lines.append("ER")
     return "\n".join(wos_lines)
 
-# === 處理所有記錄 ===
+# === Process all records ===
 records = re.findall(r'TY  -.*?ER  -', ris_text, re.DOTALL)
 converted_records = [ris_to_wos(r) for r in records]
 
-# === 組合輸出 ===
+# === Combined Output ===
 wos_output = "\n\n".join(converted_records)
 
-# === 輸出為檔案並下載 ===
+# === Export to file and download ===
 output_filename = "converted_wos_with_FN_VR_per_record.txt"
 with open(output_filename, 'w', encoding='utf-8') as f:
     f.write(wos_output)
